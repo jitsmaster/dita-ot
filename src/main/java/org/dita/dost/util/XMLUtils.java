@@ -9,9 +9,7 @@ package org.dita.dost.util;
 
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.expr.instruct.TerminationException;
-import net.sf.saxon.lib.CollationURIResolver;
-import net.sf.saxon.lib.ErrorReporter;
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.lib.*;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Step;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -27,7 +25,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
@@ -85,7 +86,11 @@ public final class XMLUtils {
     public XMLUtils() {
         catalogResolver = CatalogUtils.getCatalogResolver();
         final net.sf.saxon.Configuration config = net.sf.saxon.Configuration.newConfiguration();
-        config.setURIResolver(catalogResolver);
+//        config.setURIResolver(catalogResolver);
+//        ResourceResolver rr = catalogResolver;
+//        CatalogResourceResolver crr = new CatalogResourceResolver(catalogResolver);
+//        config.setResourceResolver(catalogResolver);
+//        config.setres
         configureSaxonExtensions(config);
         configureSaxonCollationResolvers(config);
         processor = new Processor(config);
