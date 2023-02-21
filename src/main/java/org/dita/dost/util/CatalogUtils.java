@@ -8,12 +8,13 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
+import org.xmlresolver.Resolver;
+import org.xmlresolver.ResolverFeature;
+import org.xmlresolver.XMLResolverConfiguration;
 
 import java.io.File;
 
-import org.apache.xml.resolver.CatalogManager;
-import org.apache.xml.resolver.tools.CatalogResolver;
+import static org.dita.dost.util.Constants.FILE_NAME_CATALOG;
 
 /**
  * General catalog file resolving utilities.
@@ -24,7 +25,7 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 public final class CatalogUtils {
 
     /**apache catalogResolver.*/
-    private static CatalogResolver catalogResolver = null;
+    private static Resolver catalogResolver = null;
     /** Absolute directory to find catalog-dita.xml.*/
     private static File ditaDir;
     /**
@@ -47,16 +48,23 @@ public final class CatalogUtils {
      * Get CatalogResolver.
      * @return CatalogResolver
      */
-    public static synchronized CatalogResolver getCatalogResolver() {
+    public static synchronized Resolver getCatalogResolver() {
         if (catalogResolver == null) {
-            final CatalogManager manager = new CatalogManager();
-            manager.setIgnoreMissingProperties(true);
-            manager.setUseStaticCatalog(false); // We'll use a private catalog.
-            manager.setPreferPublic(true);
+//            final CatalogManager manager = new CatalogManager();
+//            manager.setIgnoreMissingProperties(true);
+//            manager.setUseStaticCatalog(false); // We'll use a private catalog.
+//            manager.setPreferPublic(true);
             final File catalogFilePath = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG);
-            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
+//            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
             //manager.setVerbosity(10);
-            catalogResolver = new CatalogResolver(manager);
+//            catalogResolver = new CatalogResolver(manager);
+
+            XMLResolverConfiguration config = new XMLResolverConfiguration();
+            config.setFeature(ResolverFeature.PREFER_PUBLIC, true);
+            config.setFeature(ResolverFeature.CACHE_DIRECTORY, null);
+            config.setFeature(ResolverFeature.CACHE_UNDER_HOME, false);
+            config.addCatalog(catalogFilePath.toURI().toASCIIString());
+            catalogResolver = new Resolver(config);
         }
 
         return catalogResolver;

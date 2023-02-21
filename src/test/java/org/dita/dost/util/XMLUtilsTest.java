@@ -387,9 +387,7 @@ public class XMLUtilsTest {
         final List<Message> act = logger.getMessages();
         assertEquals(1, act.size());
         assertEquals("""
-                abc <def>
-                   <hij/>
-                </def>""", act.get(0).message);
+                abc <def><hij/></def>""", act.get(0).message);
     }
 
     @Test

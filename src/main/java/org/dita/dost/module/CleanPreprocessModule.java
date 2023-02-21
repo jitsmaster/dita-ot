@@ -12,16 +12,19 @@ import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.*;
+import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
 import org.w3c.dom.Document;
 import org.xml.sax.XMLFilter;
+import org.xmlresolver.Resolver;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -60,7 +63,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         useResultFilename = Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME))
                 .map(Boolean::parseBoolean)
                 .orElse(false);
-        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
+        final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
         rewriteTransformer = Optional.ofNullable(input.get("result.rewrite-rule.xsl"))
                 .map(file -> {
                     try {

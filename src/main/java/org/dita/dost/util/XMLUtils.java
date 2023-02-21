@@ -9,16 +9,19 @@ package org.dita.dost.util;
 
 import com.google.common.annotations.VisibleForTesting;
 import net.sf.saxon.expr.instruct.TerminationException;
-import net.sf.saxon.lib.*;
+import net.sf.saxon.lib.CatalogResourceResolver;
+import net.sf.saxon.lib.CollationURIResolver;
+import net.sf.saxon.lib.ErrorReporter;
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Step;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.AttributesImpl;
+import org.xmlresolver.Resolver;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -70,7 +73,7 @@ public final class XMLUtils {
         saxParserFactory.setNamespaceAware(true);
     }
     private DITAOTLogger logger;
-    private final CatalogResolver catalogResolver;
+    private final Resolver catalogResolver;
     private final Processor processor;
     private final XsltCompiler xsltCompiler;
 
@@ -89,8 +92,8 @@ public final class XMLUtils {
 //        config.setURIResolver(catalogResolver);
 //        ResourceResolver rr = catalogResolver;
 //        CatalogResourceResolver crr = new CatalogResourceResolver(catalogResolver);
-//        config.setResourceResolver(catalogResolver);
-//        config.setres
+//        final XMLCatalogAdapter xmlCatalogAdapter = new XMLCatalogAdapter(null);
+        config.setResourceResolver(new CatalogResourceResolver(catalogResolver));
         configureSaxonExtensions(config);
         configureSaxonCollationResolvers(config);
         processor = new Processor(config);
